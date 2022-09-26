@@ -1,0 +1,6 @@
+.table-header {
+  border-bottom: red 1px solid !important;
+  color: white !important;
+  background-color: #494848 !important;
+  font-weight: bolder !important;
+}
