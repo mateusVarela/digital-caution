@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TablePagination from '@material-ui/core/TablePagination'
 import TableRow from '@material-ui/core/TableRow'
 import findCautions from '../service/findCautions'
+import CautionDelete from './CautionDelete'
 
 const columns = [
   { id: 'graduation', label: 'Posto/graduação', minWidth: 70 },
@@ -44,27 +45,30 @@ const columns = [
     align: 'left'
   },
   {
-    id: 'Sender',
+    id: 'sender',
     label: 'Remetente',
     minWidth: 70,
     align: 'left'
   },
   {
-    id: 'Delete',
+    id: 'deleteComponent',
     label: 'Apagar',
     minWidth: 70,
     align: 'left'
   }
 ]
 
-function createData(graduation, name, session, device, date) {
+function createData(graduation, name, session, device, date, bewareDate, sender, deleteComponent) {
   console.log(date, 'date')
   return {
     graduation,
     name,
     session,
     device,
-    date
+    date,
+    bewareDate,
+    sender,
+    deleteComponent
   }
 }
 
@@ -99,15 +103,30 @@ export default function StickyHeadTable() {
   const rows =
     allCustomersData &&
     allCustomersData.map(caution => {
+      console.log(caution)
       const createdAt = caution.createdAt.split('T')
       const createdAtSplited = createdAt[0].split('-')
       const createdAtNormalized = createdAtSplited.reverse().join('/')
+
+      /**
+       * Data de descautela.
+       */
+      const bewareDate = caution.bewareDate || '-'
+
+      /**
+       * Quem descautelou.
+       */
+      const sender = caution.sender || 'N/A'
+
       return createData(
         caution.graduation,
         caution.name,
         caution.session,
         caution.device,
-        createdAtNormalized
+        createdAtNormalized,
+        bewareDate,
+        sender,
+        <CautionDelete cautionId={caution._id}/>
       )
     })
 
